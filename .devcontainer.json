@@ -1,0 +1,11 @@
+// For format details, see https://aka.ms/devcontainer.json.
+{
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "dbt",
+	"workspaceFolder": "/home/dbt",
+	"extensions": [
+		"ms-python.python"
+	],
+	"shutdownAction": "stopCompose",
+	"remoteUser": "dbt"
+}

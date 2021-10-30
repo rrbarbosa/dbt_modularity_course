@@ -1,0 +1,6 @@
+.db/
+.devcontainer/
+.git/
+dbt_modules/
+logs/
+target/

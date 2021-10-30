@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+  db:
+    # TODO: use a custom ECR image and avoid rate limiting
+    image: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  dbt:
+    build: .
+    platform: amd64
+    command: sleep infinity
+    volumes:
+      - .:/home/dbt
+    depends_on:
+      - db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 2s
+      timeout: 2s
+      retries: 10
+
+volumes:
+  db-data:
+
