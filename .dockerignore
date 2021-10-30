@@ -1,6 +1,8 @@
 .db/
 .devcontainer/
 .git/
+.ssh/
+.vscode-server/
 dbt_modules/
 logs/
 target/
