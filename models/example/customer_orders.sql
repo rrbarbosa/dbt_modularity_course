@@ -44,4 +44,4 @@ LEFT OUTER JOIN
     group by 1
     order by p.order_id
 ) x on x.order_id = p.order_id
-ORDER BY order_id
+ORDER BY customer_id, order_id
