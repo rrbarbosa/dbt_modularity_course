@@ -6,22 +6,21 @@ WITH paid_orders as (
         o.order_status,
         p.total_amount_paid,
         p.payment_finalized_date,
-        C.FIRST_NAME    as customer_first_name,
-        C.LAST_NAME as customer_last_name
-FROM {{ ref('base_orders') }} as o
-left join {{ ref('base_payments') }} p using (order_id)
-left join {{ ref('jaffle_shop_customers') }} C on o.customer_id = C.ID ),
-
-customer_orders 
-as (select C.ID as customer_id
-    , min(o.order_placed_at) as first_order_date
-    , max(o.order_placed_at) as most_recent_order_date
-    , count(o.order_id) AS number_of_orders
-from {{ ref('jaffle_shop_customers') }} C 
-left join {{ ref('base_orders') }} as o
-on o.customer_id = C.ID 
-group by 1)
-
+        c.customer_first_name,
+        c.customer_last_name
+    from {{ ref('base_orders') }} as o
+    left join {{ ref('base_payments') }} p using (order_id)
+    left join {{ ref('base_customers') }} c using (customer_id)
+), customer_orders as (
+    select
+        customer_id, 
+        min(o.order_placed_at) as first_order_date,
+        max(o.order_placed_at) as most_recent_order_date,
+        count(o.order_id) AS number_of_orders
+    from {{ ref('base_customers') }} c 
+    left join {{ ref('base_orders') }} as o using (customer_id)
+    group by 1
+)
 select
 p.*,
 ROW_NUMBER() OVER (ORDER BY p.order_id) as transaction_seq,
