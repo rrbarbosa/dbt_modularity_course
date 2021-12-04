@@ -9,10 +9,7 @@ WITH paid_orders as (
         C.FIRST_NAME    as customer_first_name,
         C.LAST_NAME as customer_last_name
 FROM {{ ref('base_orders') }} as o
-left join (select ORDERID as order_id, max(CREATED) as payment_finalized_date, sum(AMOUNT) / 100.0 as total_amount_paid
-        from {{ ref('stripe_payments') }}
-        where STATUS <> 'fail'
-        group by 1) p using (order_id)
+left join {{ ref('base_payments') }} p using (order_id)
 left join {{ ref('jaffle_shop_customers') }} C on o.customer_id = C.ID ),
 
 customer_orders 
