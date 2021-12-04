@@ -1,3 +1,4 @@
+-- TODO: review names and cleanup in customer_values_v2
 with paid_orders as (
     select 
         o.order_id,
